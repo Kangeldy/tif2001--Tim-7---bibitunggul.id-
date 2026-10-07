@@ -18,18 +18,18 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install server dependencies
-        working-directory: ./server
+      - name: Install backend dependencies
+        working-directory: ./backend
         run: npm install
 
-      - name: Run server tests
-        working-directory: ./server
+      - name: Run backend tests
+        working-directory: ./backend
         run: npm test --if-present
 
       - name: Install client dependencies
-        working-directory: ./client
+        working-directory: ./frontend
         run: npm install
 
-      - name: Run client lint
-        working-directory: ./client
+      - name: Run frontend lint
+        working-directory: ./frontend
         run: npm run lint --if-present
