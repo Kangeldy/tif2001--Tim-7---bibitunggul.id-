@@ -1,8 +1,13 @@
+
 const express = require("express");
 const router = express.Router();
 
-const productController = require("../controllers/productController");
+const verifyAuth = require("../middlewares/verifyAuth");
+const verifyAdmin = require("../middlewares/verifyAdmin");
+const {
+    getProducts,
+} = require("../controllers/productController");
 
-router.get("/", productController.getAllProducts);
+router.get("/", verifyAuth, verifyAdmin, getProducts);
 
 module.exports = router;
