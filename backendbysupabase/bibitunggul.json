@@ -1,0 +1,75 @@
+{
+  "v": 12,
+  "name": "bibitunggul",
+  "folders": [],
+  "requests": [
+    {
+      "v": "17",
+      "endpoint": "<<supa_url>>/products",
+      "name": "get_products",
+      "params": [],
+      "headers": [
+        {
+          "key": "apikey",
+          "value": " <<supa_key>>",
+          "active": true,
+          "description": ""
+        }
+      ],
+      "method": "GET",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "preRequestScript": "",
+      "testScript": "",
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null,
+      "id": "3ef4cd46-c4e3-470f-a7ab-8a3c22d527c5"
+    },
+    {
+      "v": "17",
+      "endpoint": "<<supa_url>>/categories",
+      "name": "get_categories",
+      "params": [],
+      "headers": [
+        {
+          "key": "apikey",
+          "value": " <<supa_key>>",
+          "active": true,
+          "description": ""
+        }
+      ],
+      "method": "GET",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "preRequestScript": "",
+      "testScript": "",
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null,
+      "id": "36dc7668-e941-49de-a250-565267f5ac24"
+    }
+  ],
+  "headers": [],
+  "auth": {
+    "authType": "none",
+    "authActive": true
+  },
+  "variables": [],
+  "description": "",
+  "preRequestScript": "",
+  "testScript": "",
+  "id": "coll_mvi4ow4j_895b4b63-fa35-42c7-9d8f-c2e89c9be39f"
+}

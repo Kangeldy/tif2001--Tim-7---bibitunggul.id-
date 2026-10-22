@@ -1,14 +1,19 @@
+
 const supabase = require("../config/supabaseClient");
 
-async function getAllProducts() {
+const getAllProducts = async () => {
   const { data, error } = await supabase
     .from("products")
     .select("*")
-    .order("id", { ascending: true });
+    .order("id", { ascending: false });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data;
-}
+};
 
-module.exports = { getAllProducts };
+module.exports = {
+  getAllProducts,
+};
