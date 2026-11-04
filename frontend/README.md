@@ -1,16 +1,43 @@
-# React + Vite
+# BibitUnggul — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend aplikasi katalog/penjualan bibit tanaman, dibangun dengan React + Vite.
 
-Currently, two official plugins are available:
+## Teknologi
+- React 19, Vite
+- Fetch API untuk integrasi REST
+- CSS responsive (mobile-first)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Menjalankan di lokal
+1. Pastikan Node.js versi LTS terpasang.
+2. Masuk ke folder frontend:
+   ```bash
+   cd frontend
+   npm install
+   ```
+3. Salin `.env.example` menjadi `.env` dan sesuaikan URL API:
+   ```env
+   VITE_API_BASE_URL=http://localhost:5000/api/v1
+   ```
+4. Jalankan `npm run dev`, lalu buka URL localhost dari Vite.
 
-## React Compiler
+## Pemeriksaan
+```bash
+npm run lint
+npm run build
+npm run preview
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Fitur frontend
+- Landing page dan navigasi.
+- Katalog produk dengan pencarian nama.
+- Fetch `GET /products`, loading state, demo fallback, dan pesan error API.
+- Responsive desktop/mobile.
 
-## Expanding the ESLint configuration
+## Kontrak integrasi
+- Base URL dari `VITE_API_BASE_URL`.
+- Produk: `GET /products`.
+- UI menerima array atau object `{ products: [] }`; field name/nama, price/harga, category/kategori, description/deskripsi, image/image_url.
+- Detail, login, dan register menunggu kontrak endpoint dari backend.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Ownership
+Perubahan dokumentasi dan kode di sini hanya workspace `frontend/`. Backend, database, dan CI/CD dikelola role terkait.
