@@ -1,17 +1,22 @@
+
 const productService = require("../services/productService");
 
-async function getAllProducts(req, res, next) {
+const getProducts = async (req, res, next) => {
   try {
     const products = await productService.getAllProducts();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Data produk berhasil diambil",
-      data: products
+      message: "Berhasil mengambil data produk",
+      data: products,
     });
   } catch (error) {
+    console.error("Gagal mengambil produk:", error.message);
     next(error);
   }
-}
+};
 
-module.exports = { getAllProducts };
+module.exports = {
+  getProducts,
+};
+

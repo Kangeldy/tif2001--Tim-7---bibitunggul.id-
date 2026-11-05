@@ -1,0 +1,19 @@
+{
+  "id": "0b64a3b2-0afb-4ff5-b05b-1e90ecccfaec",
+  "v": 2,
+  "name": "env bibit",
+  "variables": [
+    {
+      "key": "supa_url",
+      "currentValue": "",
+      "initialValue": "https://lqmsypgjfvmlmzilkxyp.supabase.co/rest/v1/",
+      "secret": false
+    },
+    {
+      "key": "supa_key",
+      "currentValue": "",
+      "initialValue": "sb_publishable_FP4ggwIrBvhTvtDf40VBAQ_eBBr14Bk",
+      "secret": false
+    }
+  ]
+}
