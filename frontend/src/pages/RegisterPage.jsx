@@ -18,9 +18,9 @@ export default function RegisterPage() {
     if (form.password.length < 6) return setError('Password minimal 6 karakter')
     setLoading(true)
     try {
-      await registerUser(form.email, form.password, form.name)
-      setSuccess('Registrasi berhasil! Silakan cek email untuk verifikasi, lalu login.')
-      setTimeout(() => navigate('/login'), 3000)
+      const res = await registerUser(form.email, form.password, form.name)
+      setSuccess(res.message || 'Registrasi berhasil! Mengalihkan ke halaman login...')
+      setTimeout(() => navigate('/login'), 1500)
     } catch (err) {
       setError(err.message || 'Registrasi gagal')
     } finally {

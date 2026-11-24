@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 
 const app = express();
@@ -21,6 +22,8 @@ app.get("/", (req, res) => {
 app.use("/api/products", productRoutes);
 // Routes autentikasi
 app.use("/api/auth", authRoutes);
+// Routes pesanan (orders)
+app.use("/api/orders", orderRoutes);
 app.use((req, res) => {
     res.status(404).json({
         success: false,

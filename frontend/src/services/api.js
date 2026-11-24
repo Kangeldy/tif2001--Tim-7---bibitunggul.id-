@@ -61,9 +61,9 @@ async function request(path, options = {}) {
   const headers = { 'Content-Type': 'application/json', Accept: 'application/json', ...options.headers }
   if (token) headers['Authorization'] = `Bearer ${token}`
 
-  // Fast timeout (1800ms) so frontend stays snappy even if backend port is closed
+  // Timeout 5 detik untuk request auth, agar backend sempat merespons
   const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), 1800)
+  const timeoutId = setTimeout(() => controller.abort(), 5000)
 
   try {
     const res = await fetch(`${API_BASE}${path}`, { ...options, headers, signal: controller.signal })
@@ -80,47 +80,13 @@ async function request(path, options = {}) {
 
 // Auth
 export const loginUser = async (email, password) => {
-  try {
-    // Attempt real backend call
-    return await request('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) })
-  } catch (backendError) {
-    // Graceful Fallback for Frontend development / demo when Supabase or backend is unreachable
-    console.warn('Backend/Supabase tidak merespons, beralih ke sesi Frontend Demo:', backendError.message)
-
-    const isDemoAdmin = email.toLowerCase().includes('admin')
-    const userRole = isDemoAdmin ? 'admin' : 'user'
-
-    return {
-      success: true,
-      isDemo: true,
-      message: `Login berhasil (${isDemoAdmin ? 'Admin' : 'Pelanggan'} Demo)`,
-      user: {
-        id: isDemoAdmin ? 'demo-admin-id' : 'demo-user-id',
-        email: email || (isDemoAdmin ? 'admin@bibitunggul.id' : 'pelanggan@bibitunggul.id'),
-        role: userRole,
-        app_metadata: { role: userRole },
-        user_metadata: { name: isDemoAdmin ? 'Administrator Demo' : 'Pelanggan BibitUnggul' }
-      },
-      session: {
-        access_token: 'demo-token-' + Date.now(),
-        token_type: 'bearer'
-      }
-    }
-  }
+  const res = await request('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) })
+  return res
 }
 
 export const registerUser = async (email, password, name) => {
-  try {
-    return await request('/auth/register', { method: 'POST', body: JSON.stringify({ email, password, name }) })
-  } catch (backendError) {
-    console.warn('Backend registrasi tidak terhubung, simulasi registrasi lokal:', backendError.message)
-    return {
-      success: true,
-      isDemo: true,
-      message: 'Registrasi simulasi berhasil! Anda dapat langsung login.',
-      user: { id: 'reg-demo-' + Date.now(), email }
-    }
-  }
+  const res = await request('/auth/register', { method: 'POST', body: JSON.stringify({ email, password, name }) })
+  return res
 }
 
 export const logoutUser = async () => {
@@ -292,25 +258,55 @@ export const deleteProduct = async (id) => {
 // Order Management (COD & Bank Transfer)
 export const createOrder = async (orderData) => {
   try {
-    // Attempt backend orders endpoint if exists
-    return await request('/orders', { method: 'POST', body: JSON.stringify(orderData) })
-  } catch {
-    // Seamless frontend order storage
-    const existing = getOrders()
-    const newOrder = {
-      ...orderData,
-      id: 'BU-' + Date.now().toString().slice(-6),
-      orderDate: new Date().toISOString(),
-      status: orderData.paymentMethod === 'cod' ? 'diproses' : 'menunggu_pembayaran'
+    const res = await request('/orders', { method: 'POST', body: JSON.stringify(orderData) })
+    if (res?.data) {
+      // Simpan ke cache lokal agar langsung muncul di Riwayat Pesanan
+      const existing = getOrders()
+      const updated = [res.data, ...existing.filter(o => o.id !== res.data.id)]
+      try {
+        localStorage.setItem('bibitunggul_orders', JSON.stringify(updated))
+      } catch (err) {
+        void err
+      }
+      return res
     }
-    const updated = [newOrder, ...existing]
-    try {
-      localStorage.setItem('bibitunggul_orders', JSON.stringify(updated))
-    } catch (err) {
-      void err
-    }
-    return { success: true, isLocal: true, data: newOrder }
+  } catch (err) {
+    console.warn('Backend orders sync fallback to local:', err.message)
   }
+
+  // Fallback lokal jika backend tidak terhubung
+  const existing = getOrders()
+  const newOrder = {
+    ...orderData,
+    id: 'BU-' + Date.now().toString().slice(-6),
+    orderDate: new Date().toISOString(),
+    status: orderData.paymentMethod === 'cod' ? 'processing' : 'pending'
+  }
+  const updated = [newOrder, ...existing]
+  try {
+    localStorage.setItem('bibitunggul_orders', JSON.stringify(updated))
+  } catch (err) {
+    void err
+  }
+  return { success: true, isLocal: true, data: newOrder }
+}
+
+export const fetchOrders = async (params = {}) => {
+  try {
+    const q = new URLSearchParams(params).toString()
+    const res = await request(`/orders${q ? '?' + q : ''}`)
+    if (res?.data && Array.isArray(res.data)) {
+      try {
+        localStorage.setItem('bibitunggul_orders', JSON.stringify(res.data))
+      } catch (err) {
+        void err
+      }
+      return res.data
+    }
+  } catch (err) {
+    console.warn('Gagal ambil orders dari server, pakai data lokal:', err.message)
+  }
+  return getOrders()
 }
 
 export const getOrders = () => {
