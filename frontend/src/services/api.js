@@ -22,7 +22,9 @@ export function getDeletedIds() {
 export function saveDeletedIds(ids) {
   try {
     localStorage.setItem('bibitunggul_deleted_ids', JSON.stringify(ids))
-  } catch {}
+  } catch (err) {
+    void err
+  }
 }
 
 // Helper for local mock storage
@@ -33,10 +35,14 @@ export function getLocalProducts() {
       const parsed = JSON.parse(saved)
       if (Array.isArray(parsed)) return parsed
     }
-  } catch {}
+  } catch (err) {
+    void err
+  }
   try {
     localStorage.setItem('bibitunggul_products', JSON.stringify(INITIAL_DEMO_PRODUCTS))
-  } catch {}
+  } catch (err) {
+    void err
+  }
   return [...INITIAL_DEMO_PRODUCTS]
 }
 
@@ -120,7 +126,9 @@ export const registerUser = async (email, password, name) => {
 export const logoutUser = async () => {
   try {
     await request('/auth/logout', { method: 'POST' })
-  } catch {}
+  } catch (err) {
+    void err
+  }
   return { success: true }
 }
 
@@ -133,7 +141,8 @@ export const getProducts = async (params = {}) => {
     const q = new URLSearchParams(params).toString()
     const res = await request(`/products${q ? '?' + q : ''}`)
     backendProducts = Array.isArray(res) ? res : res?.data || []
-  } catch {
+  } catch (err) {
+    void err
     // Backend offline / failed - continue with local
   }
 
@@ -185,7 +194,9 @@ export const getProductById = async (id) => {
   try {
     const res = await request(`/products/${encodeURIComponent(id)}`)
     if (res?.data) return res
-  } catch {}
+  } catch (err) {
+    void err
+  }
 
   return { data: null }
 }
@@ -295,7 +306,9 @@ export const createOrder = async (orderData) => {
     const updated = [newOrder, ...existing]
     try {
       localStorage.setItem('bibitunggul_orders', JSON.stringify(updated))
-    } catch {}
+    } catch (err) {
+      void err
+    }
     return { success: true, isLocal: true, data: newOrder }
   }
 }
@@ -304,7 +317,9 @@ export const getOrders = () => {
   try {
     const saved = localStorage.getItem('bibitunggul_orders')
     if (saved) return JSON.parse(saved)
-  } catch {}
+  } catch (err) {
+    void err
+  }
   return []
 }
 
@@ -352,10 +367,14 @@ export const getTestimonials = () => {
   try {
     const saved = localStorage.getItem('bibitunggul_testimonials')
     if (saved) return JSON.parse(saved)
-  } catch {}
+  } catch (err) {
+    void err
+  }
   try {
     localStorage.setItem('bibitunggul_testimonials', JSON.stringify(INITIAL_TESTIMONIALS))
-  } catch {}
+  } catch (err) {
+    void err
+  }
   return INITIAL_TESTIMONIALS
 }
 
@@ -370,7 +389,9 @@ export const createTestimonial = (data) => {
   const updated = [newTesti, ...list]
   try {
     localStorage.setItem('bibitunggul_testimonials', JSON.stringify(updated))
-  } catch {}
+  } catch (err) {
+    void err
+  }
   return { success: true, data: newTesti }
 }
 
@@ -379,6 +400,8 @@ export const deleteTestimonial = (id) => {
   const filtered = list.filter(t => t.id !== id)
   try {
     localStorage.setItem('bibitunggul_testimonials', JSON.stringify(filtered))
-  } catch {}
+  } catch (err) {
+    void err
+  }
   return { success: true }
 }

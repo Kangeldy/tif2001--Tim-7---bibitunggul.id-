@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { getProductById, getProducts } from '../services/api'
-import { useAuth } from '../context/AuthContext'
 import CheckoutModal from '../components/CheckoutModal'
 import OrderSuccessModal from '../components/OrderSuccessModal'
 
@@ -17,8 +16,6 @@ const VARIATIONS = [
 
 export default function ProductDetailPage() {
   const { id } = useParams()
-  const navigate = useNavigate()
-  const { user } = useAuth()
 
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)

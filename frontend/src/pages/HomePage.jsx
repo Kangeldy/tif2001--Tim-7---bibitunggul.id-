@@ -23,10 +23,10 @@ export default function HomePage() {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(true)
   const [apiError, setApiError] = useState(false)
-  const [orderCount, setOrderCount] = useState(0)
+  const [orderCount, setOrderCount] = useState(() => getOrders().length)
 
   // Testimonials state ("Kata Mereka")
-  const [testimonials, setTestimonials] = useState([])
+  const [testimonials, setTestimonials] = useState(() => getTestimonials())
   const [showAddTestiModal, setShowAddTestiModal] = useState(false)
   const [zoomImg, setZoomImg] = useState(null)
 
@@ -58,15 +58,8 @@ export default function HomePage() {
         if (active) setLoading(false)
       })
 
-    // Load orders
-    const orders = getOrders()
-    setOrderCount(orders.length)
-
-    // Load testimonials
-    setTestimonials(getTestimonials())
-
     return () => { active = false }
-  }, [completedOrder])
+  }, [])
 
   const shownProducts = useMemo(() =>
     (products.length ? products : demoProducts).filter(p =>

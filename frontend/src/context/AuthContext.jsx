@@ -1,19 +1,20 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [token, setToken] = useState(() => localStorage.getItem('token'))
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const stored = localStorage.getItem('user')
-    if (stored && token) {
-      try { setUser(JSON.parse(stored)) } catch {}
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('user')
+      const token = localStorage.getItem('token')
+      return stored && token ? JSON.parse(stored) : null
+    } catch (err) {
+      void err
+      return null
     }
-    setLoading(false)
-  }, [token])
+  })
+  const [token, setToken] = useState(() => localStorage.getItem('token'))
+  const [loading] = useState(false)
 
   const login = (userData, accessToken) => {
     setUser(userData)
@@ -38,6 +39,7 @@ export function AuthProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error('useAuth must be used within AuthProvider')

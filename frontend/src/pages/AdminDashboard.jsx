@@ -66,10 +66,10 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState('')
 
   // Orders state
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState(() => getOrders())
 
   // Testimonials state ("Kata Mereka")
-  const [testimonials, setTestimonials] = useState([])
+  const [testimonials, setTestimonials] = useState(() => getTestimonials())
   const [showAddTestiModal, setShowAddTestiModal] = useState(false)
   const [zoomImg, setZoomImg] = useState(null)
 
@@ -77,16 +77,6 @@ export default function AdminDashboard() {
   const [csTargetPhone, setCsTargetPhone] = useState('')
   const [csCustomMsg, setCsCustomMsg] = useState(CS_TEMPLATES[0].text)
   const [copiedIdx, setCopiedIdx] = useState(null)
-
-  useEffect(() => {
-    if (!isAdmin()) {
-      navigate('/admin/login')
-      return
-    }
-    fetchProducts()
-    loadOrders()
-    loadTestimonials()
-  }, [])
 
   const loadOrders = () => {
     const list = getOrders()
@@ -116,6 +106,29 @@ export default function AdminDashboard() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (!isAdmin()) {
+      navigate('/admin/login')
+      return
+    }
+    let isMounted = true
+    getProducts()
+      .then(res => {
+        if (isMounted) {
+          const list = Array.isArray(res) ? res : res?.data || []
+          setProducts(list)
+        }
+      })
+      .catch(e => {
+        if (isMounted) setError('Gagal memuat produk: ' + e.message)
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false)
+      })
+    return () => { isMounted = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleLogout = () => {
     logout()
