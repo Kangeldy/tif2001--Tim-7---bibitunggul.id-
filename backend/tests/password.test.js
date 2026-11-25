@@ -13,7 +13,7 @@ const {
       expect(hashedPassword).toMatch(/^\$2[aby]\$/);
     });
   
-    test("password yang benar cocok dengan hash", async () => {
+    test("password yang betul cocok dengan hash", async () => {
       const password = "ContohPassword123!";
       const hashedPassword = await hashPassword(password);
   
