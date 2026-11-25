@@ -1,2 +1,11 @@
-:root {font-family: 'DM Sans',system-ui,sans-serif;color:#202b2b;background:#fbfcfa;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-
 @import "tailwindcss";
+
+:root {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: #202b2b;
+  background: #fbfcfa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

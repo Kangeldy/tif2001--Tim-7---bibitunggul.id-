@@ -1,10 +1,20 @@
-# Client Validation Rules
+# Client Validation Rules — BibitUnggul
 
-| Input | Aturan saat ini | Implementasi |
+Validasi dilakukan di sisi browser untuk membantu pengguna; validasi ini tidak menggantikan validasi backend.
+
+| Field | Aturan UI | Pesan kesalahan |
 |---|---|---|
-| Pencarian katalog | Opsional; string bebas; pencarian tidak case-sensitive | React state + filter |
-| URL gambar produk | Harus URL valid dari payload API agar gambar dapat dimuat | Browser image loader |
-| Harga produk | Nilai numerik; format tampilan Rupiah | Intl.NumberFormat |
+| Pencarian katalog | Opsional; string bebas; tidak case-sensitive | Empty state jika tidak cocok |
+| Email login/registrasi | Format email sederhana `nama@domain.tld`; trim spasi | Masukkan email dengan format yang benar |
+| Password login | Wajib diisi | Password wajib diisi |
+| Nama registrasi | Minimal 2 karakter setelah trim | Nama minimal 2 karakter |
+| Password registrasi | Minimal 8 karakter | Password minimal 8 karakter |
+| Konfirmasi password | Harus sama dengan password | Konfirmasi password belum sama |
+| Harga produk | Nilai numerik | Ditampilkan dalam format Rupiah |
+| URL gambar | Mengikuti payload API/browser image loader | Gambar tidak tampil bila URL tidak valid |
 
-## Form autentikasi
-Belum ada form login/register di baseline ini. Aturan panjang password, email, dan field wajib harus ditetapkan setelah kontrak kebutuhan/API disepakati; jangan mengarang aturan backend.
+## Catatan integrasi
+- Form Login dan Register saat ini hanya melakukan validasi client-side.
+- Setelah validasi sukses, UI menampilkan pemberitahuan bahwa integrasi menunggu endpoint backend.
+- Jangan menyimpan password/token di local storage pada tahap ini.
+- Validasi server tetap menjadi tanggung jawab backend.

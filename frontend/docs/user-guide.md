@@ -1,10 +1,18 @@
-# User Guide — BibitUnggul (Frontend Baseline)
+# User Guide — BibitUnggul (Frontend)
 
-1. Buka halaman Beranda untuk melihat pengenalan BibitUnggul.
-2. Klik **Jelajahi Produk** atau menu **Produk** untuk menuju katalog.
-3. Ketik nama bibit pada kolom pencarian untuk menyaring produk.
+## Katalog
+1. Buka Beranda untuk melihat pengenalan BibitUnggul.
+2. Klik **Jelajahi Produk** atau menu **Produk**.
+3. Ketik nama bibit di kolom pencarian.
 4. Baca kategori, deskripsi, dan harga pada kartu produk.
-5. Tombol **Detail** saat ini masih placeholder dan belum membuka halaman detail.
-6. Jika API produk belum tersedia, katalog contoh dapat muncul. Banner memberi tahu bahwa data demo sedang digunakan.
+5. Detail produk belum membuka halaman detail; tombolnya masih placeholder.
+6. Jika API produk gagal, banner menjelaskan bahwa katalog demo digunakan.
 
-> Panduan ini menjelaskan fungsi frontend yang sudah tersedia; transaksi, akun, dan checkout belum termasuk baseline.
+## Akun
+1. Klik **Masuk** untuk membuka form login.
+2. Isi email dan password, lalu tekan **Masuk**. Form memeriksa input di browser.
+3. Klik **Daftar** untuk membuka form registrasi.
+4. Isi nama, email, password (minimal 8 karakter), dan konfirmasi password.
+5. Setelah validasi benar, UI menyampaikan bahwa integrasi API belum tersedia.
+
+> Form login/registrasi belum mengirim data ke server. Akun, JWT, dan checkout belum termasuk fungsi frontend yang terhubung.
