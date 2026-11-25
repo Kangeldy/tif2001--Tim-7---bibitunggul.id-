@@ -1,9 +1,24 @@
-import { getOrders } from '../services/api'
+import { useState, useEffect } from 'react'
+import { getOrders, fetchOrders } from '../services/api'
 
 const rupiah = v => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(v) || 0)
 
 export default function OrdersHistoryModal({ onClose }) {
-  const orders = getOrders()
+  const [orders, setOrders] = useState(() => getOrders())
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    setLoading(true)
+    fetchOrders().then(data => {
+      if (active && Array.isArray(data)) {
+        setOrders(data)
+      }
+    }).finally(() => {
+      if (active) setLoading(false)
+    })
+    return () => { active = false }
+  }, [])
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-fade-in">
@@ -28,7 +43,12 @@ export default function OrdersHistoryModal({ onClose }) {
 
         {/* List Pesanan */}
         <div className="p-6 overflow-y-auto space-y-4 flex-1">
-          {orders.length === 0 ? (
+          {loading && orders.length === 0 ? (
+            <div className="p-12 text-center text-gray-500">
+              <span className="text-3xl block mb-2 animate-bounce">🌱</span>
+              <p className="font-semibold text-xs text-[#2e5934]">Memuat pesanan dari Supabase...</p>
+            </div>
+          ) : orders.length === 0 ? (
             <div className="p-12 text-center text-gray-500">
               <span className="text-4xl block mb-2">🌿</span>
               <p className="font-bold text-[#1d3b29]">Belum ada pesanan</p>
